@@ -27,6 +27,11 @@ function MeshBody(fname::String;map=(x,t)->x,scale=1.0,boundary=true,thk=0f0,T=F
     bbox = Rect(bbox.origin.-max(4,thk),bbox.widths.+max(8,2thk))
     return MeshBody(mesh,mesh,srf_id,map,bbox,T(scale),T(thk/2),boundary)
 end
+function MeshBody(mesh::GeometryBasics.Mesh; map=(x,t)->x, scale=1.0, boundary=true, thk=0f0, T=Float32)
+    bbox = Rect(mesh.position)
+    bbox = Rect(bbox.origin .- max(4, thk), bbox.widths .+ max(8, 2thk))
+    return MeshBody(mesh, mesh, nothing, map, bbox, T(scale), T(thk/2), boundary)
+end
 Base.copy(b::MeshBody) = (mesh=GeometryBasics.Mesh(b.mesh.position,GeometryBasics.faces(b.mesh));
                           MeshBody(mesh,mesh,b.srfID,b.map,Rect(b.bbox),b.scale,b.half_thk,b.boundary))
 
